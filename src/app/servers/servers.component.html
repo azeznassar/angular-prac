@@ -1,2 +1,30 @@
+<label>Server Name</label>
+<!-- <input type="text" (input)="OnUpdateServerName($event)"> -->
+<!-- $event is a reserved word that gives us access to the event data -->
+
+<input type="text" [(ngModel)]="serverName">
+    <!-- Two way data binding - combo of event and property binding syntax (also need FormsModule to use ngModel) 
+            Will trigger on the input event and and update the value of serverName automatically
+            Since it is 2 way data binding, it will also update serverName is it is updated somewhere else-->
+
+<!-- <p>{{ serverName }}</p> -->
+
+<button 
+[disabled]="!allowNewServer" 
+(click)="onCreateServer()"
+>Add Server</button>
+
+<!-- 
+    [] = Property binding
+    () = Event binding 
+-->
+
+<!-- <p>{{ allowNewServer }}</p> -- Does the same as the below property binding
+    if you want to output something: use string interpolation
+    else if you want to change a property of something(html or directive): use property binding
+--> 
+<!-- <p [innerText]="allowNewServer"></p> -->
+
+<p>{{ serverCreationStatus }}</p>
 <app-server></app-server>  
 <app-server></app-server>  
