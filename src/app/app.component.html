@@ -1,5 +1,24 @@
 <h2>This is my first Angular app</h2>
+
+<!-- <button (click)="showMessage = !showMessage">Toggle message display</button> -->
+<button (click)="onToggleMessage()">Toggle message display</button>
+
+<p *ngIf="showMessage">Learning Angular is fun!</p>
+
+
+<div 
+*ngFor="let logItem of log; let i = index"
+
+[ngStyle]="{backgroundColor: i >= 4 ? 'blue' : 'transparent'}"
+
+[ngClass]="{'white-text': i >= 4}"
+
+>{{ logItem }}</div>
+<!-- I am pasing the ngClass property on the ngClass directive an object with the class I want to add and the conditon -->
 <hr>
+
+<h3>Servers</h3>
+
 <app-servers></app-servers>
 
 <router-outlet></router-outlet>
