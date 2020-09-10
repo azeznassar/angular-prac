@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subscription, Observable } from 'rxjs';
-
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   //Create property to hold obs subscription
   private firstObsSubscription: Subscription;
-
   constructor() { }
 
   ngOnInit() {
@@ -47,15 +46,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 1000)
     })
 
+    // Operators  -- Inbetween the observable and the subscription so raw data can be transformed or filtered -- this is not change the data inside the orginial obs variable - it only changes the data after pipe() -- map() is an example of an operator - with pipe() I can add many operators, If I wanted more, add another argument to the pipe() method e.g. map() / filter()
+    let pipedObsSubscription = customIntervalObservable.pipe(filter(data => {
+      if (data > 0) {
+        return true
+      }
+    }), map((data : number) => { // this is the raw data that we would have otherwise gotten in the first subscribe() callback
+        return "Round: " + (data + 1);
+    }))
 
-    //Subscribe to the observable and set up the handler functions that will generate the observer object that the observable takes (1st data, 2nd errors, 3rd complete) 
+    //Subscribe to the observable and set up the handler functions that will generate the observer object that the observable takes (1st data, 2nd errors, 3rd complete) - With an observable and an observer we can listen to the data with a subscription
     //Subscribe to custom observable
-    this.firstObsSubscription = customIntervalObservable.subscribe(data => { // first argument - recieve the data emitted from the obs
+    this.firstObsSubscription = pipedObsSubscription.subscribe(data => { // first argument/callback - recieve the data emitted from the obs
       console.log(data)
-    }, error => { // second argument = recieve and handle the error from the obs
+    }, error => { // second argument/callback = recieve and handle the error from the obs
       alert(error.message)
       //console.log(error)
-    }, () => { // third argument = recieve and handle the completion of the obs (WONT trigger when an obs is canceled due to an error)
+    }, () => { // third argument/callback = recieve and handle the completion of the obs (WONT trigger when an obs is canceled due to an error)
       console.log("Completed")
     })
 
@@ -69,3 +76,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 }
+
+// Subscription -- Listen to the data (and possibly errors) from an observable
+// Operators  -- Inbetween the observable and the subscription so raw data can be transformed or filtered - Subscribe to the result of the built-in operators rather than the raw data
